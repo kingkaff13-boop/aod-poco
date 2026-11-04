@@ -1,7 +1,9 @@
-name: Build APK
+ name: Build APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +20,9 @@ jobs:
           gradle-version: '8.7'
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+      - name: Rilis APK
+        uses: softprops/action-gh-release@v2
         with:
-          name: AOD-Poco-apk
-          path: app/build/outputs/apk/debug/*.apk
+          tag_name: v1.0.${{ github.run_number }}
+          name: AOD Poco v1.0.${{ github.run_number }}
+          files: app/build/outputs/apk/debug/*.apk
